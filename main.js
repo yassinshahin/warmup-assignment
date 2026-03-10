@@ -68,12 +68,12 @@ function getIdleTime(startTime, endTime) {
 
     let idleTime = 0;
 
-    // Idle before 8 AM
+    //  8 AM
     if (startSec < deliveryStart) {
         idleTime += Math.min(deliveryStart, endSec) - startSec;
     }
 
-    // Idle after 10 PM
+    //  10 PM
     if (endSec > deliveryEnd) {
         idleTime += endSec - Math.max(deliveryEnd, startSec);
     }
@@ -95,7 +95,7 @@ function metQuota(date, activeTime) {
     const day = dateParts[2];
     const activeSec = hmsToSeconds(activeTime);
 
-    // Eid al-Fitr: April 10–30, 2025 → quota = 6 hours
+    // Eid al-Fitr: April 10–30, 2025 → quota = 6 hours as in stated in warup A.
     const isEid = (year === 2025 && month === 4 && day >= 10 && day <= 30);
     const quotaSec = isEid ? 6 * 3600 : 8 * 3600 + 24 * 60;
 
@@ -112,7 +112,7 @@ function addShiftRecord(textFile, shiftObj) {
    const content = fs.readFileSync(textFile, 'utf8');
     const lines = content.split('\n').filter(line => line.trim() !== '');
 
-    // Check for duplicate (same driverID + date)
+    //duplicate (same driverID + date)
     for (const line of lines) {
         const record = parseShiftLine(line);
         if (record.driverID === shiftObj.driverID && record.date === shiftObj.date) {
@@ -141,7 +141,7 @@ function addShiftRecord(textFile, shiftObj) {
 
     const newLine = shiftToLine(newRecord);
 
-    // Find position to insert: after last record of same driverID
+    //position to insert: after last record of same driverID
     let lastIndex = -1;
     for (let i = 0; i < lines.length; i++) {
         const record = parseShiftLine(lines[i]);
@@ -151,7 +151,7 @@ function addShiftRecord(textFile, shiftObj) {
     }
 
     if (lastIndex === -1) {
-        // driverID not found, append at end
+        // if driverID not found append at end
         lines.push(newLine);
     } else {
         // Insert after last record of this driverID
